@@ -247,3 +247,58 @@ public class App {
     }
 }
 ```
+
+## Add the happy path
+
+- In this case pass in the factorial parameter and follow the RED, GREEN, REFACTOR path
+```java
+@Test
+public void testAppShouldPrintTheFactorialIfTheGivenNumber() {
+    ByteArrayOutputStream actual = new ByteArrayOutputStream();
+    System.setOut(new PrintStream(actual));
+
+    App.main(new String[]{"6"});
+
+    assertEquals("720\n", actual.toString());
+}
+```
+```java
+public class App {
+    public static void main(String[] args) {
+        System.out.println(factorial(Integer.parseInt(args[0])));
+    }
+}
+```
+- Here this will make the previous case fail (Regression case) as we did not pass any parameter there and we are expecting 1 argument here and we are even accessing `args[0]`, 
+  - this is the benefit of having tests, we can always be assured that the system works if the tests pass and that's big!
+  - Now fix the test and follow red, green, refactor.
+```java
+public class AppTest {
+    @Test
+    public void testAppShouldNotFailIfNoInputIsGiven() {
+        assertDoesNotThrow(() -> App.main(new String[]{}));
+    }
+
+    @Test
+    public void testAppShouldPrintTheFactorialIfTheGivenNumber() {
+        ByteArrayOutputStream actual = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(actual));
+
+        App.main(new String[]{"6"});
+
+        assertEquals("720\n", actual.toString());
+    }
+}
+```
+
+```java
+public class App {
+    public static void main(String[] args) {
+        if (args.length == 0){
+            return;
+        }
+        int n = Integer.parseInt(args[0]);
+        System.out.println(factorial(n));
+    }
+}
+```
