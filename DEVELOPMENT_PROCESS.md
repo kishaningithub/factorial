@@ -25,3 +25,42 @@ This project goal is to serve as an example for building cli apps using TDD
     </dependency>
   </dependencies>
 ```
+- Add the first failing test and make it pass
+  - When writing the test always start with the assertion to aid the thinking process
+```java
+public class FactorialTest {
+    @Test
+    public void testFactorialOf0Is1(){
+        assertEquals(1, factorial(0));
+    }
+}
+```
+  - At this point the `factorial` method does not exist (the first RED! yay!) so make it GREEN by creating the method
+```java
+public class FactorialTest {
+    @Test
+    public void testFactorialOf0Is1(){
+        assertEquals(1, factorial(0));
+    }
+
+    private int factorial(int n) {
+        return 0;
+    }
+}
+```
+  - If you notice above i have done the most minimal change (just created the method in the test class itself) and we have the first GREEN (compiler is happy)
+  - Now run the test
+    - The test will fail with the following (our second RED)
+```
+org.opentest4j.AssertionFailedError: 
+Expected :1
+Actual   :0
+```
+    - Now make the test pass by doing the minimal change 
+```java
+private int factorial(int n) {
+    return 1;
+}
+```
+- The test passes! Now on to the third phase REFACTOR!
+  - Move the factorial method to a separate class
