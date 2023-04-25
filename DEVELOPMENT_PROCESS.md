@@ -153,7 +153,7 @@ public class FactorialTest {
 
 ### Lets try to break the system
 
-#### Integer boundaries
+#### Breaking integer boundaries
 
 If you notice the factorial results grows quite exponentially with input
 - Let try n=13, if you see the value of factorial is 6227020800 (~ 6 billion) which is larger than the maximum size of integer which is 2147483647 (~ 2 billion)
@@ -194,7 +194,7 @@ static long factorial(int n) {
 ```
 - NOTE: we only write implementation code if the test demands it!
 
-#### Long boundaries
+#### Breaking long boundaries
 - If you observe factorial(30) is `265252859812191058636308480000000` which is much much higher then the size of long. In java, the data type that can hold huge integers like is `BigInteger` lets use that
 - After following the RED, GREEN, REFACTOR this will be the results
 ```java
@@ -220,3 +220,30 @@ static BigInteger factorial(int n) {
 }
 ```
 
+### Next feature - expose this as a CLI App
+
+The next feature is to try expose this as a CLI app. So far we have been dealing with "pure" functions which jelled so well with
+our thought process, as we increase the side effects (printing to console, writing to network etc) the amount of setup that is
+needed to test this application increases so TDD actually nudges you to decrease the amount of side effects thereby improving the 
+overall design
+
+### Start with the corner case
+
+- In this lets test for the case where the app is run without passing any input
+- Follow the test first approach and create classes and implementation details, the result will look like this
+```java
+public class AppTest {
+    @Test
+    public void testAppShouldNotFailIfNoInputIsGiven() {
+        assertDoesNotThrow(App::main);
+    }
+}
+```
+
+```java
+public class App {
+    public static void main() {
+
+    }
+}
+```
