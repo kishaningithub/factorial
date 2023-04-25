@@ -302,3 +302,42 @@ public class App {
     }
 }
 ```
+
+### Bonus! - Create an executable jar
+
+let's try doing this the TDD way!
+
+- Run `mvn clean package` and then run `java -jar target/*.jar`. This will result in the following error (RED)
+```
+no main manifest attribute, in target/factorial-1.0-SNAPSHOT.jar
+```
+- Let's fix it (GREEN)
+```xml
+<build>
+<plugins>
+  <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <executions>
+      <execution>
+        <goals>
+          <goal>shade</goal>
+        </goals>
+        <configuration>
+          <shadedArtifactAttached>true</shadedArtifactAttached>
+          <transformers>
+            <transformer implementation=
+                                 "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+              <mainClass>org.example.App</mainClass>
+            </transformer>
+          </transformers>
+        </configuration>
+      </execution>
+    </executions>
+  </plugin>
+</plugins>
+</build>
+```
+- Now run `mvn clean package` and `java -jar target/*-shaded.jar 30` and you will see the glorious result :-) `265252859812191058636308480000000`
+
+That's all folks! :-)
