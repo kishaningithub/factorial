@@ -1,10 +1,12 @@
 package org.example;
 
+import java.math.BigInteger;
+
 public class Factorial {
-    static long factorial(int n) {
+    static BigInteger factorial(int n) {
         if (n == 0) {
-            return 1;
+            return BigInteger.ONE;
         }
-        return n * factorial(n - 1);
+        return BigInteger.valueOf(n).multiply(factorial(n - 1));
     }
 }

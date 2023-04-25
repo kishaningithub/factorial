@@ -153,7 +153,7 @@ public class FactorialTest {
 
 ### Lets try to break the system
 
-### Integer boundaries
+#### Integer boundaries
 
 If you notice the factorial results grows quite exponentially with input
 - Let try n=13, if you see the value of factorial is 6227020800 (~ 6 billion) which is larger than the maximum size of integer which is 2147483647 (~ 2 billion)
@@ -194,4 +194,29 @@ static long factorial(int n) {
 ```
 - NOTE: we only write implementation code if the test demands it!
 
+#### Long boundaries
+- If you observe factorial(30) is `265252859812191058636308480000000` which is much much higher then the size of long. In java, the data type that can hold huge integers like is `BigInteger` lets use that
+- After following the RED, GREEN, REFACTOR this will be the results
+```java
+@ParameterizedTest
+@CsvSource({
+        "0, 1",
+        "1, 1",
+        "2, 2",
+        "3, 6",
+        "13, 6227020800",
+        "30, 265252859812191058636308480000000"
+})
+public void testFactorial(int n, BigInteger expected) {
+    assertEquals(expected, factorial(n));
+}
+```
+```java
+static BigInteger factorial(int n) {
+    if (n == 0) {
+        return BigInteger.ONE;
+    }
+    return BigInteger.valueOf(n).multiply(factorial(n - 1));
+}
+```
 
