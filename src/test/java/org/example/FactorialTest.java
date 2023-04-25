@@ -1,6 +1,5 @@
 package org.example;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -14,9 +13,10 @@ public class FactorialTest {
             "0, 1",
             "1, 1",
             "2, 2",
-            "3, 6"
+            "3, 6",
+            "13, 6227020800"
     })
-    public void testFactorial(int n, int expected) {
+    public void testFactorial(int n, long expected) {
         assertEquals(expected, factorial(n));
     }
 

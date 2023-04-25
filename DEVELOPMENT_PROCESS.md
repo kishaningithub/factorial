@@ -5,10 +5,10 @@ This project goal is to serve as an example for building cli apps using TDD
 
 ## Steps
 
-- Create the project using maven quickstart archetype, either via CLI or via GUI of your IDE
+###  Create the project using maven quickstart archetype, either via CLI or via GUI of your IDE
   - Using command line `mvn archetype:generate -DgroupId=com.example -DartifactId=factorial -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false`
   - [Using intelliJ](https://www.jetbrains.com/idea/guide/tutorials/working-with-maven/creating-a-project/) 
-- Update the pom.xml to include Junit and remove all existing java files viz `AppTest.java` and `App.java` to have a clean slate
+### Update the pom.xml to include Junit and remove all existing java files viz `AppTest.java` and `App.java` to have a clean slate
 ```xml
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,8 +25,10 @@ This project goal is to serve as an example for building cli apps using TDD
     </dependency>
   </dependencies>
 ```
-- Add the first failing test and make it pass
-  - When writing the test always start with the assertion to aid the thinking process
+
+### Add the first failing test and make it pass
+ 
+- When writing the test always start with the assertion to aid the thinking process
 ```java
 public class FactorialTest {
     @Test
@@ -35,7 +37,7 @@ public class FactorialTest {
     }
 }
 ```
-  - At this point the `factorial` method does not exist (the first RED! yay!) so make it GREEN by creating the method
+- At this point the `factorial` method does not exist (the first RED! yay!) so make it GREEN by creating the method
 ```java
 public class FactorialTest {
     @Test
@@ -48,9 +50,9 @@ public class FactorialTest {
     }
 }
 ```
-  - If you notice above i have done the most minimal change (just created the method in the test class itself) and we have the first GREEN (compiler is happy)
-  - Now run the test
-    - The test will fail with the following (our second RED)
+- If you notice above i have done the most minimal change (just created the method in the test class itself) and we have the first GREEN (compiler is happy)
+- Now run the test
+  - The test will fail with the following (our second RED)
 ```
 org.opentest4j.AssertionFailedError: 
 Expected :1
@@ -71,23 +73,27 @@ public class Factorial {
     }
 }
 ```
-- Add the second test
+
+### Add the second test
+
 ```java
 @Test
 public void testFactorialOf1Is1() {
     assertEquals(1, factorial(1));
 }
 ```
-  - If you notice here the test passes! because if you notice the implementation we just return 1
-  - Now on to the third
-- Add the third test case
+- If you notice here the test passes! because if you notice the implementation we just return 1
+- Now on to the third
+
+### Add the third test case
+
 ```java
 @Test
 public void testFactorialOf2Is2(){
     assertEquals(2, factorial(2));
 }
 ```
-  - This will fail(RED), now make it pass (GREEN) with the minimal code change to satisfy the test
+- This will fail(RED), now make it pass (GREEN) with the minimal code change to satisfy the test
 ```java
 static int factorial(int n) {
     if(n == 0 || n == 1){
@@ -96,15 +102,17 @@ static int factorial(int n) {
     return 2;
 }
 ```
-  - There is not much to REFACTOR, now on to the next
-- Add the fourth test case
+- There is not much to REFACTOR, now on to the next
+
+### Add the fourth test case
+
 ```java
 @Test
 public void testFactorialOf3Is6(){
     assertEquals(6, factorial(3));
 }
 ```
-  - The test case will fail (RED), now make it pass (GREEN)
+- The test case will fail (RED), now make it pass (GREEN)
 ```java
 public class Factorial {
     static int factorial(int n) {
@@ -142,3 +150,48 @@ public class FactorialTest {
 }
 ```
   - Yeah that refactor was cool :-)
+
+### Lets try to break the system
+
+### Integer boundaries
+
+If you notice the factorial results grows quite exponentially with input
+- Let try n=13, if you see the value of factorial is 6227020800 (~ 6 billion) which is larger than the maximum size of integer which is 2147483647 (~ 2 billion)
+```java
+@ParameterizedTest
+@CsvSource({
+        "0, 1",
+        "1, 1",
+        "2, 2",
+        "3, 6",
+        "13, 6227020800"
+})
+public void testFactorial(int n, int expected) {
+    assertEquals(expected, factorial(n));
+}
+```
+- The above test will fail because integer value cannot hold it, so lets convert it to a bigger value which is long, to the code becomes
+```java
+@ParameterizedTest
+@CsvSource({
+        "0, 1",
+        "1, 1",
+        "2, 2",
+        "3, 6",
+        "13, 6227020800"
+})
+public void testFactorial(int n, long expected) {
+    assertEquals(expected, factorial(n));
+}
+```
+```java
+static long factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+```
+- NOTE: we only write implementation code if the test demands it!
+
+
