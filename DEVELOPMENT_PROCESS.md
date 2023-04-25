@@ -78,5 +78,67 @@ public void testFactorialOf1Is1() {
     assertEquals(1, factorial(1));
 }
 ```
- - If you notice here the test passes! because if you notice the implementation we just return 1
- - Now on to the third
+  - If you notice here the test passes! because if you notice the implementation we just return 1
+  - Now on to the third
+- Add the third test case
+```java
+@Test
+public void testFactorialOf2Is2(){
+    assertEquals(2, factorial(2));
+}
+```
+  - This will fail(RED), now make it pass (GREEN) with the minimal code change to satisfy the test
+```java
+static int factorial(int n) {
+    if(n == 0 || n == 1){
+        return 1;
+    }
+    return 2;
+}
+```
+  - There is not much to REFACTOR, now on to the next
+- Add the fourth test case
+```java
+@Test
+public void testFactorialOf3Is6(){
+    assertEquals(6, factorial(3));
+}
+```
+  - The test case will fail (RED), now make it pass (GREEN)
+```java
+public class Factorial {
+    static int factorial(int n) {
+        if (n == 0 || n == 1) {
+            return 1;
+        }
+        return n * factorial(n - 1);
+    }
+}
+```
+  - Now time to REFACTOR, here we refactor both the implementation and tests
+    - The `n == 1` is redundant and hence the implementation code can be simplified as
+```java
+static int factorial(int n) {
+    if (n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+```
+  - The test code can leverage the power of `ParameterizedTest` in junit5 and simplify the test as
+```java
+public class FactorialTest {
+
+    @ParameterizedTest
+    @CsvSource({
+            "0, 1",
+            "1, 1",
+            "2, 2",
+            "3, 6"
+    })
+    public void testFactorial(int n, int expected) {
+        assertEquals(expected, factorial(n));
+    }
+}
+```
+  - Yeah that refactor was cool :-)
