@@ -56,7 +56,7 @@ org.opentest4j.AssertionFailedError:
 Expected :1
 Actual   :0
 ```
-    - Now make the test pass by doing the minimal change 
+  - Now make the test pass by doing the minimal change 
 ```java
 private int factorial(int n) {
     return 1;
@@ -64,3 +64,19 @@ private int factorial(int n) {
 ```
 - The test passes! Now on to the third phase REFACTOR!
   - Move the factorial method to a separate class
+```java
+public class Factorial {
+    static int factorial(int n) {
+        return 1;
+    }
+}
+```
+- Add the second test
+```java
+@Test
+public void testFactorialOf1Is1() {
+    assertEquals(1, factorial(1));
+}
+```
+ - If you notice here the test passes! because if you notice the implementation we just return 1
+ - Now on to the third
